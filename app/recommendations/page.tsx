@@ -63,7 +63,7 @@ export default async function RecommendationsPage({
       .order("score", { ascending: false }),
   ]);
 
-  const matches = (rawMatches ?? []) as MatchRow[];
+  const matches = (rawMatches ?? []) as unknown as MatchRow[];
   const validMatches = matches.filter((m) => m.score > 0 && m.jobs !== null);
 
   return (
