@@ -69,17 +69,26 @@ export default function RegisterPage() {
     if (Object.keys(errs).length > 0) return;
 
     setLoading(true);
-    const { error } = await supabase.from("seniors").insert({
-      name: form.name.trim(),
-      region: form.region,
-      desired_job: form.desired_job,
-      career_years: form.career_years ? Number(form.career_years) : 0,
-    });
+    const { data: inserted, error } = await supabase
+      .from("seniors")
+      .insert({
+        name: form.name.trim(),
+        region: form.region,
+        desired_job: form.desired_job,
+        career_years: form.career_years ? Number(form.career_years) : 0,
+      })
+      .select("id")
+      .single();
     setLoading(false);
 
     if (error) {
       setErrors({ name: `저장 실패: ${error.message}` });
       return;
+    }
+
+    // 자동 매칭 재계산 (RPC)
+    if (inserted) {
+      await supabase.rpc("rematch_senior", { p_senior_id: inserted.id });
     }
 
     setSuccess(true);

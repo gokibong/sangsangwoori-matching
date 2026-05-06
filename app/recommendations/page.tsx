@@ -1,49 +1,116 @@
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/lib/supabase";
 
-export const metadata = {
-  title: "추천 목록 | 상상우리",
+type JobInfo = {
+  id: string;
+  title: string;
+  region: string;
+  job_type: string;
+  required_career: number;
 };
 
-const placeholderItems = [
-  { rank: 1, score: 95 },
-  { rank: 2, score: 82 },
-  { rank: 3, score: 71 },
-];
+type MatchRow = {
+  id: string;
+  score: number;
+  status: string;
+  jobs: JobInfo | null;
+};
 
-export default function RecommendationsPage() {
+function scoreBadge(score: number): { label: string; cls: string } {
+  if (score === 6)
+    return { label: `${score}점`, cls: "bg-yellow-100 text-yellow-800 border-yellow-300" };
+  if (score >= 4)
+    return { label: `${score}점`, cls: "bg-green-100 text-green-800 border-green-300" };
+  return { label: `${score}점`, cls: "bg-gray-100 text-gray-700 border-gray-300" };
+}
+
+export const metadata = { title: "추천 목록 | 상상우리" };
+
+export default async function RecommendationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ senior_id?: string }>;
+}) {
+  const { senior_id } = await searchParams;
+
+  if (!senior_id) {
+    return (
+      <div>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">매칭 추천 목록</h1>
+        <div className="rounded-lg border border-blue-200 bg-blue-50 px-5 py-4 text-lg text-blue-800">
+          시니어를 선택해 주세요.{" "}
+          <Link href="/admin" className="font-semibold underline">
+            담당자 대시보드
+          </Link>
+          에서 시니어를 선택하면 됩니다.
+        </div>
+      </div>
+    );
+  }
+
+  const [{ data: senior }, { data: rawMatches }] = await Promise.all([
+    supabase
+      .from("seniors")
+      .select("name, region, desired_job")
+      .eq("id", senior_id)
+      .single(),
+    supabase
+      .from("matches")
+      .select("id, score, status, jobs(id, title, region, job_type, required_career)")
+      .eq("senior_id", senior_id)
+      .order("score", { ascending: false }),
+  ]);
+
+  const matches = (rawMatches ?? []) as MatchRow[];
+  const validMatches = matches.filter((m) => m.score > 0 && m.jobs !== null);
+
   return (
     <div>
       <h1 className="text-4xl font-bold text-gray-900 mb-2">매칭 추천 목록</h1>
-      <p className="text-lg text-gray-600 mb-8">
-        점수 높은 순으로 일자리를 추천합니다. (기능 구현 예정)
-      </p>
 
-      {/* 추천 카드 목록 자리 */}
-      <div className="space-y-4">
-        {placeholderItems.map(({ rank, score }) => (
-          <Card key={rank} className="shadow-sm border border-gray-200">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xl text-gray-400">
-                추천 #{rank} — 일자리 정보가 여기에 표시됩니다
-              </CardTitle>
-              <Badge className="text-base px-3 py-1 bg-blue-100 text-blue-800 border border-blue-200">
-                점수 {score}
-              </Badge>
-            </CardHeader>
-            <CardContent>
-              <CardDescription className="text-base text-gray-400">
-                직종 · 지역 · 필요 경력 정보 (데이터 연동 후 표시)
-              </CardDescription>
-            </CardContent>
-          </Card>
-        ))}
+      {senior ? (
+        <p className="text-lg text-gray-600 mb-8">
+          <span className="font-semibold text-gray-900">{senior.name}</span>님 (
+          {senior.region} · {senior.desired_job})의 매칭 결과입니다.
+        </p>
+      ) : (
+        <p className="mb-8 text-lg text-red-600">시니어 정보를 찾을 수 없습니다.</p>
+      )}
+
+      {validMatches.length === 0 ? (
+        <div className="rounded-lg border border-gray-200 bg-gray-50 px-5 py-10 text-center text-xl text-gray-500">
+          현재 매칭되는 일자리가 없습니다.
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {validMatches.map((m, i) => {
+            const job = m.jobs!;
+            const { label, cls } = scoreBadge(m.score);
+            return (
+              <Card key={m.id} className="border border-gray-200 shadow-sm">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-xl">
+                    #{i + 1}&nbsp;{job.title}
+                  </CardTitle>
+                  <Badge className={`border px-3 py-1 text-base ${cls}`}>{label}</Badge>
+                </CardHeader>
+                <CardContent className="flex flex-wrap gap-6 text-lg text-gray-700">
+                  <span>📍 {job.region}</span>
+                  <span>💼 {job.job_type}</span>
+                  <span>경력 {job.required_career}년 이상</span>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+
+      <div className="mt-8">
+        <Link href="/admin" className="text-lg font-medium text-blue-600 hover:underline">
+          ← 담당자 대시보드로 돌아가기
+        </Link>
       </div>
     </div>
   );
