@@ -20,7 +20,7 @@ INSERT INTO seniors (name, region, desired_job, career_years) VALUES
   ('윤기석', '서울',      '조리',  7),
   ('장미자', '인천',      '청소',  4),
   ('오상훈', '기타',      '기타', 20),
-  ('임복순', '서울특별시', '경비',  6);
+  ('임복순', '서울특별시', '경비직',  6);
 
 -- 3. jobs (15건)
 INSERT INTO jobs (title, region, job_type, required_career) VALUES
