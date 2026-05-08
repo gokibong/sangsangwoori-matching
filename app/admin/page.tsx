@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { AlertTriangle, Clock, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -203,17 +204,18 @@ export default function AdminPage() {
       {/* ── 집계 카드 3개 ── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {[
-          { label: "미매칭 시니어", count: unmatchedCount, cardCls: "border-red-200    bg-red-50",    numCls: "text-red-700"    },
-          { label: "매칭 대기",     count: pendingCount,   cardCls: "border-yellow-200 bg-yellow-50", numCls: "text-yellow-700" },
-          { label: "배정 완료",     count: assignedCount,  cardCls: "border-green-200  bg-green-50",  numCls: "text-green-700"  },
-        ].map(({ label, count, cardCls, numCls }) => (
+          { label: "미매칭 시니어", count: unmatchedCount, Icon: AlertTriangle,  cardCls: "border-red-200    bg-red-50",    numCls: "text-red-700",    iconCls: "text-red-400"    },
+          { label: "매칭 대기",     count: pendingCount,   Icon: Clock,          cardCls: "border-yellow-200 bg-yellow-50", numCls: "text-yellow-700", iconCls: "text-yellow-400" },
+          { label: "배정 완료",     count: assignedCount,  Icon: CheckCircle2,   cardCls: "border-green-200  bg-green-50",  numCls: "text-green-700",  iconCls: "text-green-400"  },
+        ].map(({ label, count, Icon, cardCls, numCls, iconCls }) => (
           <Card key={label} className={`border-2 shadow-sm ${cardCls}`}>
             <CardContent className="py-6 text-center">
+              <Icon className={`mx-auto mb-3 h-10 w-10 ${iconCls}`} />
               <p className="text-xl font-semibold text-gray-700 mb-2">{label}</p>
               <p className={`text-5xl font-bold ${numCls}`}>
                 {dashLoading ? "…" : count}
               </p>
-              <p className="mt-1 text-base text-gray-500">명</p>
+              <p className="mt-1 text-lg text-gray-500">명</p>
             </CardContent>
           </Card>
         ))}

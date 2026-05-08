@@ -99,15 +99,15 @@ export default function RegisterPage() {
   return (
     <div className="max-w-xl mx-auto">
       <h1 className="text-4xl font-bold text-gray-900 mb-2">
-        시니어 프로필 등록
+        시니어 일자리 신청하기
       </h1>
-      <p className="text-lg text-gray-600 mb-8">
+      <p className="text-xl text-gray-600 mb-8">
         아래 정보를 입력하시면 맞춤 일자리를 추천해 드립니다.
       </p>
 
       {success && (
         <div className="mb-6 rounded-lg border border-green-300 bg-green-50 px-5 py-4 text-xl font-bold text-green-800">
-          등록이 완료되었습니다 ✓
+          등록이 완료되었습니다. 담당자가 곧 연락드립니다 ✓
         </div>
       )}
 
@@ -124,10 +124,11 @@ export default function RegisterPage() {
             <div className="space-y-1">
               <label
                 htmlFor="name"
-                className="block text-lg font-semibold text-gray-800"
+                className="block text-xl font-semibold text-gray-800"
               >
                 이름 *
               </label>
+              <p className="text-lg text-gray-500">성함을 적어 주세요.</p>
               {errors.name && <ErrorBox msg={errors.name} />}
               <input
                 id="name"
@@ -143,10 +144,11 @@ export default function RegisterPage() {
             <div className="space-y-1">
               <label
                 htmlFor="region"
-                className="block text-lg font-semibold text-gray-800"
+                className="block text-xl font-semibold text-gray-800"
               >
                 지역 *
               </label>
+              <p className="text-lg text-gray-500">어디에서 일하고 싶으세요?</p>
               {errors.region && <ErrorBox msg={errors.region} />}
               <select
                 id="region"
@@ -167,10 +169,11 @@ export default function RegisterPage() {
             <div className="space-y-1">
               <label
                 htmlFor="desired_job"
-                className="block text-lg font-semibold text-gray-800"
+                className="block text-xl font-semibold text-gray-800"
               >
                 희망 직종 *
               </label>
+              <p className="text-lg text-gray-500">어떤 일을 하시겠어요?</p>
               {errors.desired_job && <ErrorBox msg={errors.desired_job} />}
               <select
                 id="desired_job"
@@ -191,10 +194,11 @@ export default function RegisterPage() {
             <div className="space-y-1">
               <label
                 htmlFor="career_years"
-                className="block text-lg font-semibold text-gray-800"
+                className="block text-xl font-semibold text-gray-800"
               >
                 경력 (년)
               </label>
+              <p className="text-lg text-gray-500">근무 경험이 몇 년이나 되세요? (없으면 0)</p>
               <input
                 id="career_years"
                 type="number"

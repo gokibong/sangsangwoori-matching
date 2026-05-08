@@ -20,10 +20,10 @@ type MatchRow = {
 
 function scoreBadge(score: number): { label: string; cls: string } {
   if (score === 6)
-    return { label: `${score}점`, cls: "bg-yellow-100 text-yellow-800 border-yellow-300" };
+    return { label: `${score}점 · 매우 적합`, cls: "bg-yellow-100 text-yellow-800 border-yellow-300" };
   if (score >= 4)
-    return { label: `${score}점`, cls: "bg-green-100 text-green-800 border-green-300" };
-  return { label: `${score}점`, cls: "bg-gray-100 text-gray-700 border-gray-300" };
+    return { label: `${score}점 · 적합`, cls: "bg-green-100 text-green-800 border-green-300" };
+  return { label: `${score}점 · 보통`, cls: "bg-gray-100 text-gray-700 border-gray-300" };
 }
 
 export const metadata = { title: "추천 목록 | 상상우리" };
@@ -68,20 +68,22 @@ export default async function RecommendationsPage({
 
   return (
     <div>
-      <h1 className="text-4xl font-bold text-gray-900 mb-2">매칭 추천 목록</h1>
+      <h1 className="text-4xl font-bold text-gray-900 mb-2">
+        {senior ? `${senior.name} 님께 맞는 일자리` : "매칭 추천 목록"}
+      </h1>
 
       {senior ? (
-        <p className="text-lg text-gray-600 mb-8">
-          <span className="font-semibold text-gray-900">{senior.name}</span>님 (
-          {senior.region} · {senior.desired_job})의 매칭 결과입니다.
+        <p className="text-xl text-gray-600 mb-8">
+          {senior.region} · {senior.desired_job} · 담당자가 선별한 추천 목록입니다.
         </p>
       ) : (
-        <p className="mb-8 text-lg text-red-600">시니어 정보를 찾을 수 없습니다.</p>
+        <p className="mb-8 text-xl text-red-600">시니어 정보를 찾을 수 없습니다.</p>
       )}
 
       {validMatches.length === 0 ? (
-        <div className="rounded-lg border border-gray-200 bg-gray-50 px-5 py-10 text-center text-xl text-gray-500">
-          현재 매칭되는 일자리가 없습니다.
+        <div className="rounded-lg border border-gray-200 bg-gray-50 px-5 py-10 text-center">
+          <p className="text-xl font-semibold text-gray-600">현재 매칭되는 일자리가 없습니다.</p>
+          <p className="mt-3 text-lg text-gray-400">담당자가 직접 연락드리니 잠시만 기다려 주세요.</p>
         </div>
       ) : (
         <div className="space-y-4">
