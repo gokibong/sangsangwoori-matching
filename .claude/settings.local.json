@@ -8,7 +8,31 @@
       "mcp__supabase__create_project",
       "mcp__supabase__apply_migration",
       "mcp__supabase__get_project_url",
-      "mcp__supabase__get_publishable_keys"
+      "mcp__supabase__get_publishable_keys",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_select_option",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3000/admin\" -UseBasicParsing | Select-Object -ExpandProperty StatusCode)",
+      "PowerShell(vercel env *)",
+      "Bash(npm run *)",
+      "Bash(dir *)",
+      "mcp__supabase__list_tables",
+      "mcp__supabase__execute_sql",
+      "Bash(npm install *)",
+      "Bash(npx playwright *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(npx vercel *)",
+      "Bash(curl *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('token_found:', bool\\(d.get\\('token'\\)\\)\\)\")",
+      "Read(//c/Users/고한승/AppData/Roaming/**)",
+      "Read(//c/Users/고한승/AppData/Local/**)",
+      "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const j=JSON.parse\\(d\\); console.log\\('ssoProtection:', JSON.stringify\\(j.ssoProtection\\)\\); console.log\\('alias:', JSON.stringify\\(j.alias\\)\\); console.log\\('name:', j.name\\);\")",
+      "Bash(node -e \"const j=require\\('C:/Users/고한승/AppData/Local/Temp/proj.json'\\); console.log\\('ssoProtection:', JSON.stringify\\(j.ssoProtection\\)\\); console.log\\('alias:', JSON.stringify\\(j.alias\\)\\); console.log\\('name:', j.name\\);\")",
+      "Bash(node -e \"const j=require\\('C:/Users/고한승/AppData/Local/Temp/patch.json'\\); console.log\\('ssoProtection after patch:', JSON.stringify\\(j.ssoProtection\\)\\); console.log\\('name:', j.name\\);\")"
     ]
   }
 }
